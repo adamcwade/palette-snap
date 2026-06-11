@@ -42,7 +42,10 @@
     "typescript": "^5.4.0",
     "vitest": "^2.0.0"
   },
-  "repository": "github:adamcwade/palette-snap",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamcwade/palette-snap.git"
+  },
   "keywords": [
     "react",
     "color",
