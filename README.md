@@ -1,5 +1,9 @@
 # palette-snap
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/adamcwade/palette-snap/main/docs/demo.svg" alt="Animated demo: an image is dropped into the PaletteSnap dropzone, its color palette is extracted into five swatches, and clicking a swatch copies its hex code" width="720">
+</p>
+
 A React component & hook for extracting color palettes from images, right in the browser, with zero dependencies.
 
 Drop in an image, get back its dominant colors as hex codes. The extraction runs entirely client-side using histogram binning and K-means clustering in the perceptually-uniform CIELAB color space, so the palettes look like what your eyes actually see.
