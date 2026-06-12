@@ -71,13 +71,13 @@ export const swatches: CSSProperties = {
 };
 
 export const swatch: CSSProperties = {
+  position: 'relative',
   flex: 1,
   display: 'flex',
   alignItems: 'flex-end',
   justifyContent: 'center',
   height: 64,
   padding: 6,
-  border: 'none',
   borderRadius: 8,
   cursor: 'pointer',
   font: 'inherit',
@@ -87,7 +87,36 @@ export const swatchLabel: CSSProperties = {
   fontSize: 12,
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
   padding: '2px 6px',
+  border: 'none',
   borderRadius: 4,
   backgroundColor: 'rgba(255, 255, 255, 0.85)',
   color: '#222',
+  cursor: 'pointer',
+};
+
+export const editChip: CSSProperties = {
+  position: 'absolute',
+  top: 6,
+  right: 6,
+  width: 20,
+  height: 20,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderRadius: '50%',
+  backgroundColor: 'rgba(255, 255, 255, 0.85)',
+  color: '#222',
+  cursor: 'pointer',
+  overflow: 'hidden',
+};
+
+export const editInput: CSSProperties = {
+  position: 'absolute',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  padding: 0,
+  border: 'none',
+  opacity: 0,
+  cursor: 'pointer',
 };

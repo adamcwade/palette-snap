@@ -1,6 +1,6 @@
 {
   "name": "palette-snap",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React component & hook for extracting color palettes from images — K-means clustering in LAB color space, zero dependencies",
   "license": "MIT",
   "type": "module",

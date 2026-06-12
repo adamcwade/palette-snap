@@ -25,6 +25,8 @@ export interface UsePaletteResult {
   error: Error | null;
   /** Extracts a palette from the given source. Browser-only. */
   extract: (source: PaletteSource) => Promise<string[]>;
+  /** Replaces the current colors, e.g. after the user edits a swatch. */
+  setColors: (colors: string[]) => void;
   /** Clears colors, preview, and error state. */
   reset: () => void;
 }
@@ -151,5 +153,5 @@ export function usePalette(options: UsePaletteOptions = {}): UsePaletteResult {
     setError(null);
   }, [releaseOwnedUrl]);
 
-  return { colors, previewUrl, loading, error, extract, reset };
+  return { colors, previewUrl, loading, error, extract, setColors, reset };
 }

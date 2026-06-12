@@ -8,7 +8,7 @@ A React component & hook for extracting color palettes from images, right in the
 
 Drop in an image, get back its dominant colors as hex codes. The extraction runs entirely client-side using histogram binning and K-means clustering in the perceptually-uniform CIELAB color space, so the palettes look like what your eyes actually see.
 
-- 🎨 **`<PaletteSnap />`**: a drag-and-drop upload zone with image preview and click-to-copy swatches
+- 🎨 **`<PaletteSnap />`**: a drag-and-drop upload zone with image preview and click-to-copy swatches, each adjustable with a built-in color picker
 - 🪝 **`usePalette()`**: a headless hook when you want your own UI
 - ⚙️ **`extractColors()`**: the framework-free core, if all you have is raw pixel data
 - 📦 ESM + CJS + TypeScript types, React 17+, no runtime dependencies
@@ -35,7 +35,7 @@ function App() {
 }
 ```
 
-That's it. The component renders a dropzone, accepts a dragged or selected image, shows a preview, and displays the extracted palette as swatches. Clicking a swatch copies its hex code to the clipboard.
+That's it. The component renders a dropzone, accepts a dragged or selected image, shows a preview, and displays the extracted palette as swatches. Clicking a swatch copies its hex code to the clipboard, and the pencil button on each swatch opens a color picker so you can fine-tune any generated color. Edits are reported through `onPaletteChange` just like extractions.
 
 ### `<PaletteSnap />` props
 
@@ -47,6 +47,7 @@ That's it. The component renders a dropzone, accepts a dragged or selected image
 | `onError` | `(error: Error) => void` | | Called when loading or extraction fails |
 | `onCopy` | `(hex: string) => void` | | Called after a swatch is copied to the clipboard |
 | `copyOnClick` | `boolean` | `true` | Copy a swatch's hex code on click |
+| `editable` | `boolean` | `true` | Show a color picker on each swatch so colors can be adjusted |
 | `showSwatches` | `boolean` | `true` | Render the built-in swatch row (set `false` to render your own) |
 | `label` | `ReactNode` | `'Drag & drop…'` | Empty-state prompt inside the dropzone |
 | `initialImage` | `string` | | Image URL to load and extract on mount |
@@ -62,7 +63,7 @@ The default styling is intentionally minimal inline CSS, so no stylesheet import
 import { usePalette } from 'palette-snap';
 
 function MyUploader() {
-  const { colors, previewUrl, loading, error, extract, reset } = usePalette({
+  const { colors, previewUrl, loading, error, extract, setColors, reset } = usePalette({
     paletteSize: 4,
   });
 
@@ -84,7 +85,7 @@ function MyUploader() {
 }
 ```
 
-`extract()` accepts a `File`, `Blob`, `HTMLImageElement`, or URL string and resolves with the hex colors. URL sources are loaded with `crossOrigin="anonymous"` by default; the image's server must send CORS headers, otherwise the browser blocks pixel access (you'll get a descriptive error). `File`/`Blob` sources always work.
+`extract()` accepts a `File`, `Blob`, `HTMLImageElement`, or URL string and resolves with the hex colors. `setColors()` replaces the current palette, which is handy for wiring up your own color pickers. URL sources are loaded with `crossOrigin="anonymous"` by default; the image's server must send CORS headers, otherwise the browser blocks pixel access (you'll get a descriptive error). `File`/`Blob` sources always work.
 
 The hook is SSR-safe to import (Next.js etc.) because canvas work only happens inside `extract()`, which is browser-only.
 

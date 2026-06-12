@@ -33,6 +33,8 @@ export interface PaletteSnapProps {
   onCopy?: (hex: string) => void;
   /** Copy a swatch's hex code on click. Default true. */
   copyOnClick?: boolean;
+  /** Show a color picker on each swatch so colors can be adjusted. Default true. */
+  editable?: boolean;
   /** Render the built-in swatch row. Set false to render your own via `onPaletteChange`. Default true. */
   showSwatches?: boolean;
   /** Empty-state prompt shown inside the dropzone. */
@@ -56,6 +58,7 @@ export function PaletteSnap({
   onError,
   onCopy,
   copyOnClick = true,
+  editable = true,
   showSwatches = true,
   label = 'Drag & drop an image, or click to upload',
   initialImage,
@@ -64,7 +67,7 @@ export function PaletteSnap({
   style,
   classNames = {},
 }: PaletteSnapProps) {
-  const { colors, previewUrl, loading, error, extract } = usePalette({
+  const { colors, previewUrl, loading, error, extract, setColors } = usePalette({
     paletteSize,
     maxImageWidth,
   });
@@ -104,6 +107,12 @@ export function PaletteSnap({
     if (file && file.type.startsWith('image/')) {
       handleSource(file);
     }
+  };
+
+  const handleColorEdit = (index: number, value: string) => {
+    const next = colors.map((c, i) => (i === index ? value : c));
+    setColors(next);
+    onPaletteChange?.(next);
   };
 
   const handleCopy = (hex: string) => {
@@ -191,19 +200,51 @@ export function PaletteSnap({
 
       {showSwatches && colors.length > 0 && (
         <div className={classNames.swatches} style={styles.swatches}>
-          {colors.map((hex) => (
-            <button
-              key={hex}
-              type="button"
+          {colors.map((hex, i) => (
+            <div
+              key={i}
               title={copyOnClick ? `Copy ${hex}` : hex}
               className={classNames.swatch}
-              style={{ ...styles.swatch, backgroundColor: hex }}
+              style={{
+                ...styles.swatch,
+                ...(copyOnClick ? undefined : { cursor: 'default' }),
+                backgroundColor: hex,
+              }}
               onClick={() => handleCopy(hex)}
             >
-              <span className={classNames.swatchLabel} style={styles.swatchLabel}>
+              {editable && (
+                <span
+                  style={styles.editChip}
+                  title={`Edit ${hex}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <svg width="11" height="11" viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      fill="currentColor"
+                      d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                    />
+                  </svg>
+                  <input
+                    type="color"
+                    value={hex}
+                    aria-label={`Edit color ${hex}`}
+                    style={styles.editInput}
+                    onChange={(e) => handleColorEdit(i, e.target.value)}
+                  />
+                </span>
+              )}
+              <button
+                type="button"
+                className={classNames.swatchLabel}
+                style={styles.swatchLabel}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCopy(hex);
+                }}
+              >
                 {copied === hex ? 'Copied!' : hex}
-              </span>
-            </button>
+              </button>
+            </div>
           ))}
         </div>
       )}
